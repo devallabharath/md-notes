@@ -2,13 +2,17 @@ package main
 
 import (
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/widget"
+	"github.com/devallabharath/md-notes/core"
+	"github.com/devallabharath/md-notes/ui"
 )
+
+func init() {
+	core.NewConfig()
+}
 
 func main() {
 	App := app.New()
 	Window := App.NewWindow("MD-Notes")
-	label := widget.NewLabel("Hello")
-	Window.SetContent(label)
+	Window.SetContent(ui.MainView())
 	Window.ShowAndRun()
 }
