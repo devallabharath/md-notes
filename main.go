@@ -13,6 +13,7 @@ func init() {
 
 func main() {
 	App := app.New()
+	App.Settings().SetTheme(core.NewTheme())
 	Window := App.NewWindow("MD-Notes")
 	Window.Resize(fyne.NewSize(1000, 600))
 	Window.SetContent(ui.MainView(1000))
