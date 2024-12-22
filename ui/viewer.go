@@ -1,15 +1,14 @@
 package ui
 
 import (
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
-	"github.com/devallabharath/md-notes/core"
 )
 
 // MainView :: main view of the app
-func MainView(winWidth float64) *container.Split {
-	tree := NewFileTree(storage.NewFileURI(core.Config.Path))
+func MainView(winSize fyne.Size, path fyne.URI) (*container.Split, *container.AppTabs) {
+	tree := NewFileTree(path)
 	tabs := NewTabs()
 
 	tree.OnSelected = func(uid widget.TreeNodeID) {
@@ -26,7 +25,7 @@ func MainView(winWidth float64) *container.Split {
 	}
 
 	mainview := container.NewHSplit(tree, tabs)
-	mainview.SetOffset(float64(tree.MinSize().Width / 1000))
+	mainview.SetOffset(float64(tree.MinSize().Width / winSize.Width))
 
-	return mainview
+	return mainview, tabs
 }

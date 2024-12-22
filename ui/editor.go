@@ -11,7 +11,7 @@ import (
 // Editor :: type of the Editor
 type Editor struct {
 	writer  *widget.Entry
-	preview *widget.RichText
+	preview *widget.TextGrid
 }
 
 // NewEditor :: creates new editor
@@ -26,11 +26,15 @@ func NewEditor(uri fyne.URI) (*Editor, error) {
 		return nil, error
 	}
 	editor := widget.NewMultiLineEntry()
+	editor.Wrapping = fyne.TextWrap(3)
+	editor.TextStyle.TabWidth = 2
+	editor.TextStyle.Monospace = true
 	editor.SetText(string(content))
-	renderer := widget.NewRichTextFromMarkdown(string(content))
-	editor.OnChanged = renderer.ParseMarkdown
+	viewer := widget.NewTextGrid()
+	viewer.SetText(string(content))
+	editor.OnChanged = viewer.SetText
 	return &Editor{
 		editor,
-		renderer,
+		viewer,
 	}, nil
 }
