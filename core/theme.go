@@ -9,17 +9,19 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
-// Theme :: Custom Theme for app
-type Theme struct{}
+// Dark :: dark theme
+type Dark struct{}
 
 // NewTheme :: Creates and return new theme
-func NewTheme() *Theme {
-	return &Theme{}
+func NewTheme() *Dark {
+	return &Dark{}
 }
 
-// Color :: Custom Colors
-func (Theme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
+// Color :: provides colors
+func (Dark) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
 	switch c {
+	case theme.ColorYellow:
+	  return color.NRGBA{R: 0x00, G: 0xff, B: 0xff, A: 0xff}
 	case theme.ColorNameBackground:
 		return color.NRGBA{R: 0x32, G: 0x30, B: 0x43, A: 0xff}
 	case theme.ColorNameButton:
@@ -53,31 +55,33 @@ func (Theme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
 	}
 }
 
-// Font :: Custom Fonts
-func (Theme) Font(s fyne.TextStyle) fyne.Resource {
+// Font :: provides fonts
+func (Dark) Font(s fyne.TextStyle) fyne.Resource {
 	if s.Monospace {
 		return fontCascadiaMonoTtf
 	}
 	if s.Bold {
 		if s.Italic {
-			return fontSauceCodeProNerdFontBoldItalicTtf
+			return theme.DefaultTheme().Font(s)
 		}
-		return fontSauceCodeProNerdFontBoldTtf
+		return fontMiSansBoldTtf
 	}
 	if s.Italic {
-		return fontSauceCodeProNerdFontItalicTtf
+		return theme.DefaultTheme().Font(s)
 	}
-	return fontSauceCodeProNerdFontRegularTtf
+	return fontMiSansRegularTtf
 }
 
-// Icon :: Custom Icons
-func (Theme) Icon(n fyne.ThemeIconName) fyne.Resource {
+// Icon :: provides icons
+func (Dark) Icon(n fyne.ThemeIconName) fyne.Resource {
 	return theme.DefaultTheme().Icon(n)
 }
 
-// Size :: Custom Sizes
-func (Theme) Size(s fyne.ThemeSizeName) float32 {
+// Size :: provides sizes
+func (Dark) Size(s fyne.ThemeSizeName) float32 {
 	switch s {
+	case theme.SizeNameHeadingText:
+		return 18
 	case theme.SizeNameCaptionText:
 		return 12
 	case theme.SizeNameInlineIcon:

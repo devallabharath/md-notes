@@ -16,7 +16,7 @@ type Tab struct {
 
 func (tab *Tab) save() {
 	fmt.Println(tab.uri.Name(), "saved")
-	content := tab.Editor.writer.Text
+	content := tab.Editor.editor.Text
 	fmt.Println(content)
 }
 
@@ -31,8 +31,8 @@ func NewTab(uri fyne.URI) (*Tab, error) {
 	if err != nil {
 		return nil, err
 	}
-	editSroll := container.NewScroll(Editor.writer)
-	previewSroll := container.NewScroll(Editor.preview)
+	editSroll := container.NewScroll(Editor.editor)
+	previewSroll := container.NewScroll(Editor.viewer)
 	view := container.NewHSplit(editSroll, previewSroll)
 	tab := container.NewTabItem(uri.Name(), view)
 

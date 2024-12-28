@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	fyne.io/fyne/v2 v2.5.3
-	github.com/yuin/goldmark v1.7.1
+	github.com/yuin/goldmark v1.7.8
 )
 
 require (
