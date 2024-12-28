@@ -7,6 +7,7 @@ import (
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 	"github.com/devallabharath/md-notes/core"
+	"github.com/devallabharath/md-notes/themes"
 	"github.com/devallabharath/md-notes/ui"
 )
 
@@ -28,7 +29,7 @@ func init() {
 	core.NewConfig()
 	App = &appType{}
 	App.App = app.New()
-	App.App.Settings().SetTheme(core.NewTheme())
+	App.App.Settings().SetTheme(themes.NewTheme(fyne.ThemeVariant(2)))
 }
 
 // NewWindow :: creates a new window and returna

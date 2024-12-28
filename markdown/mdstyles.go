@@ -1,11 +1,14 @@
-package utils
+package markdown
 
 import (
 	"image/color"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
+	"github.com/devallabharath/md-notes/utils"
 )
+
+var colors = utils.Colors
 
 type styles struct {
 	Normal    fyne.TextStyle
@@ -31,7 +34,7 @@ func (c *gridStyle) BackgroundColor() color.Color {
 }
 
 type mdstyles struct {
-	Normal    widget.TextGridStyle
+	Normal     widget.TextGridStyle
 	Heading    widget.TextGridStyle
 	Emphasis   widget.TextGridStyle
 	Italic     widget.TextGridStyle
@@ -48,9 +51,9 @@ var TextStyles = &styles{
 
 // MdStyles :: markdown styles
 var MdStyles = &mdstyles{
-	&gridStyle{TextStyles.Bold, Colors.White, Colors.Transparent},
-	&gridStyle{TextStyles.Bold, Colors.Yellow, Colors.Transparent},
-	&gridStyle{TextStyles.Bold, Colors.White, Colors.Black},
-	&gridStyle{TextStyles.Bold, Colors.White, Colors.Black},
-	&gridStyle{TextStyles.Bold, Colors.White, Colors.Black},
+	&gridStyle{TextStyles.Bold, colors.White, colors.Transparent},
+	&gridStyle{TextStyles.Bold, colors.Yellow, colors.Transparent},
+	&gridStyle{TextStyles.Bold, colors.White, colors.Transparent},
+	&gridStyle{TextStyles.Bold, colors.White, colors.Transparent},
+	&gridStyle{TextStyles.Bold, colors.White, colors.Black},
 }
