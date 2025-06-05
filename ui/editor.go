@@ -9,7 +9,7 @@ import (
 
 // Editor :: type of the Editor
 type Editor struct {
-	editor  *widget.Entry
+	editor *widget.Entry
 	viewer *markdown.Md
 }
 

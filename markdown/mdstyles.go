@@ -1,59 +1,121 @@
 package markdown
 
 import (
-	"image/color"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/widget"
-	"github.com/devallabharath/md-notes/utils"
 )
 
-var colors = utils.Colors
-
-type styles struct {
-	Normal    fyne.TextStyle
-	Bold      fyne.TextStyle
-	Italic    fyne.TextStyle
-	Underline fyne.TextStyle
-}
-
-type gridStyle struct {
-	style fyne.TextStyle
-	fg    color.Color
-	bg    color.Color
-}
-
-func (c *gridStyle) Style() fyne.TextStyle {
-	return c.style
-}
-func (c *gridStyle) TextColor() color.Color {
-	return c.fg
-}
-func (c *gridStyle) BackgroundColor() color.Color {
-	return c.bg
-}
+var (
+	// text styles
+	Normal          = fyne.TextStyle{}
+	Bold            = fyne.TextStyle{Bold: true}
+	Italic          = fyne.TextStyle{Italic: true}
+	BoldItalic      = fyne.TextStyle{Bold: true, Italic: true}
+	Underline       = fyne.TextStyle{Underline: true}
+	BoldUnderline   = fyne.TextStyle{Bold: true, Underline: true}
+	ItalicUnderline = fyne.TextStyle{Italic: true, Underline: true}
+	// text alignment
+	Left   = fyne.TextAlign(0)
+	Center = fyne.TextAlign(1)
+	Right  = fyne.TextAlign(2)
+	// text size
+	Bigger  = fyne.ThemeSizeName("headingText")
+	Big     = fyne.ThemeSizeName("subHeadingText")
+	Small   = fyne.ThemeSizeName("text")
+	Smaller = fyne.ThemeSizeName("smaller")
+	Tiny    = fyne.ThemeSizeName("tiny")
+	// text colors
+	Text   = fyne.ThemeColorName("text")
+	Red    = fyne.ThemeColorName("red")
+	Green  = fyne.ThemeColorName("green")
+	Blue   = fyne.ThemeColorName("blue")
+	Yellow = fyne.ThemeColorName("yellow")
+	Orange = fyne.ThemeColorName("orange")
+)
 
 type mdstyles struct {
-	Normal     widget.TextGridStyle
-	Heading    widget.TextGridStyle
-	Emphasis   widget.TextGridStyle
-	Italic     widget.TextGridStyle
-	Blockquote widget.TextGridStyle
-}
-
-// TextStyles :: text styles like bold, italic, underline
-var TextStyles = &styles{
-	fyne.TextStyle{},
-	fyne.TextStyle{Bold: true},
-	fyne.TextStyle{Italic: true},
-	fyne.TextStyle{Underline: true},
+	Text       widget.RichTextStyle
+	Paragraph  widget.RichTextStyle
+	Heading    widget.RichTextStyle
+	Heading1   widget.RichTextStyle
+	Heading2   widget.RichTextStyle
+	Emphasis   widget.RichTextStyle
+	Italic     widget.RichTextStyle
+	Blockquote widget.RichTextStyle
+	Codeblock  widget.RichTextStyle
+	Emptyline  widget.RichTextStyle
 }
 
 // MdStyles :: markdown styles
 var MdStyles = &mdstyles{
-	&gridStyle{TextStyles.Bold, colors.White, colors.Transparent},
-	&gridStyle{TextStyles.Bold, colors.Yellow, colors.Transparent},
-	&gridStyle{TextStyles.Bold, colors.White, colors.Transparent},
-	&gridStyle{TextStyles.Bold, colors.White, colors.Transparent},
-	&gridStyle{TextStyles.Bold, colors.White, colors.Black},
+	Text: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Small,
+		TextStyle: Normal,
+	},
+	Paragraph: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Small,
+		TextStyle: Normal,
+	},
+	Heading: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Big,
+		TextStyle: Bold,
+	},
+	Heading1: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Yellow,
+		Inline:    false,
+		SizeName:  Bigger,
+		TextStyle: Bold,
+	},
+	Heading2: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Yellow,
+		Inline:    false,
+		SizeName:  Bigger,
+		TextStyle: Bold,
+	},
+	Emphasis: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Small,
+		TextStyle: Bold,
+	},
+	Italic: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Small,
+		TextStyle: Italic,
+	},
+	Blockquote: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Small,
+		TextStyle: Normal,
+	},
+	Codeblock: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Small,
+		TextStyle: Normal,
+	},
+	Emptyline: widget.RichTextStyle{
+		Alignment: Left,
+		ColorName: Text,
+		Inline:    false,
+		SizeName:  Tiny,
+		TextStyle: Normal,
+	},
 }

@@ -4,9 +4,7 @@ import (
 	"sort"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/storage"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -28,13 +26,15 @@ func NewFileTree(root fyne.URI) *FileTree {
 		Tree: widget.Tree{
 			Root: root.String(),
 			CreateNode: func(branch bool) fyne.CanvasObject {
-				var icon fyne.CanvasObject
-				if branch {
-					icon = widget.NewIcon(nil)
-				} else {
-					icon = widget.NewFileIcon(nil)
-				}
-				return container.NewBorder(nil, nil, icon, nil, widget.NewLabel("Template Object"))
+				//var icon fyne.CanvasObject
+				//if branch {
+				//	icon = widget.NewIcon(nil)
+				//} else {
+				//	icon = widget.NewFileIcon(nil)
+				//}
+				//fyne.TextStyle{true, true}
+				//return container.NewBorder(nil, nil, icon, nil, widget.NewLabel("Template Object"))
+				return widget.NewLabelWithStyle("\t Template Object", fyne.TextAlignLeading, fyne.TextStyle{TabWidth: 2})
 			},
 		},
 		listCache:     make(map[widget.TreeNodeID][]widget.TreeNodeID),
@@ -78,21 +78,21 @@ func NewFileTree(root fyne.URI) *FileTree {
 			return
 		}
 
-		c := node.(*fyne.Container)
-		if branch {
-			var r fyne.Resource
-			if tree.IsBranchOpen(id) {
-				// Set open folder icon
-				r = theme.FolderOpenIcon()
-			} else {
-				// Set folder icon
-				r = theme.FolderIcon()
-			}
-			c.Objects[1].(*widget.Icon).SetResource(r)
-		} else {
-			// Set file uri to update icon
-			c.Objects[1].(*widget.FileIcon).SetURI(uri)
-		}
+		c := node.(*widget.Label)
+		//if node.(*widget.Label) && branch {
+		//	var r fyne.Resource
+		//	if tree.IsBranchOpen(id) {
+		//		// Set open folder icon
+		//		r = theme.FolderOpenIcon()
+		//	} else {
+		//		// Set folder icon
+		//		r = theme.FolderIcon()
+		//	}
+		//	c.Objects[1].(*widget.Icon).SetResource(r)
+		//} else {
+		//	// Set file uri to update icon
+		//	c.Objects[1].(*widget.FileIcon).SetURI(uri)
+		//}
 
 		var l string
 		if tree.Root == id && tree.ShowRootPath {
@@ -100,7 +100,8 @@ func NewFileTree(root fyne.URI) *FileTree {
 		} else {
 			l = uri.Name()
 		}
-		c.Objects[0].(*widget.Label).SetText(l)
+		//c.Objects[0].(*widget.Label).SetText(l)
+		c.SetText(l)
 	}
 
 	// reset sorted child ID cache if the branch is closed - in the future we do FS watch
@@ -109,7 +110,8 @@ func NewFileTree(root fyne.URI) *FileTree {
 	}
 
 	tree.ExtendBaseWidget(tree)
-	tree.MinSize()
+	tree.HideSeparators = true
+	tree.ShowRootPath = false
 	return tree
 }
 

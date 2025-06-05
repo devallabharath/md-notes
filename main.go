@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
@@ -16,7 +18,7 @@ type appType struct {
 	Window  fyne.Window
 	Menu    *widget.Menu
 	Toolbar *widget.Toolbar
-	Sidebar *widget.Tree
+	Sidebar *ui.FileTree
 	AppTabs *container.AppTabs
 	Tabs    []*container.TabItem
 	View    *container.Split
@@ -32,18 +34,33 @@ func init() {
 	App.App.Settings().SetTheme(themes.NewTheme(fyne.ThemeVariant(2)))
 }
 
+func newTab(file fyne.URI) {
+	tab, _ := ui.NewTab(file)
+	App.AppTabs.Append(tab.Tab)
+}
+
 // NewWindow :: creates a new window and returna
 func NewWindow(title string, size fyne.Size, path fyne.URI) {
 	win := App.App.NewWindow(title)
 	win.Resize(size)
 	App.Window = win
-	App.View, App.AppTabs = ui.MainView(size, path)
-	App.Window.SetContent(App.View)
+	//App.View, App.Sidebar, App.AppTabs = ui.MainView(size, path)
+	//App.Window.SetContent(App.View)
+	App.AppTabs = ui.MainView(size, path)
+	App.Window.SetContent(App.AppTabs)
+	if len(os.Args) > 1 {
+		url := os.Args[1]
+		newTab(storage.NewFileURI(url))
+	} else {
+		newTab(storage.NewFileURI("./test.md"))
+	}
+	// App.Sidebar.Hide()
 	win.ShowAndRun()
 }
 
 func main() {
 	winSize := fyne.NewSize(1000, 600)
-	path := storage.NewFileURI(core.Config.Path + "/interview/")
+	dir, _ := os.UserHomeDir()
+	path := storage.NewFileURI(dir)
 	NewWindow("MD-Notes", winSize, path)
 }

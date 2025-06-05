@@ -13,6 +13,7 @@ import (
 	"github.com/devallabharath/md-notes/utils"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/renderer"
 )
 
@@ -33,7 +34,7 @@ func renderNode(source []byte, n ast.Node, blockquote bool) ([]widget.RichTextSe
 	case *ast.Paragraph:
 		children, err := renderChildren(source, n, blockquote)
 		if !blockquote {
-			linebreak := &widget.TextSegment{Style: widget.RichTextStyleParagraph}
+			linebreak := &widget.TextSegment{Style: MdStyles.Paragraph}
 			children = append(children, linebreak)
 		}
 		return children, err
@@ -51,16 +52,19 @@ func renderNode(source []byte, n ast.Node, blockquote bool) ([]widget.RichTextSe
 		text := forceIntoHeadingText(source, n)
 		switch t.Level {
 		case 1:
-			return []widget.RichTextSegment{&widget.TextSegment{Style: widget.RichTextStyleHeading, Text: text}}, nil
+			return []widget.RichTextSegment{&widget.TextSegment{Style: MdStyles.Heading1, Text: text}}, nil
 		case 2:
-			return []widget.RichTextSegment{&widget.TextSegment{Style: widget.RichTextStyleHeading, Text: text}}, nil
+			return []widget.RichTextSegment{&widget.TextSegment{Style: MdStyles.Heading2, Text: text}}, nil
 		default:
-			textSegment := widget.TextSegment{Style: widget.RichTextStyleParagraph, Text: text}
-			textSegment.Style.TextStyle.Bold = true
+			textSegment := widget.TextSegment{Style: MdStyles.Heading, Text: text}
 			return []widget.RichTextSegment{&textSegment}, nil
 		}
 	case *ast.ThematicBreak:
-		return []widget.RichTextSegment{&widget.SeparatorSegment{}}, nil
+		return []widget.RichTextSegment{
+			&widget.TextSegment{Style: MdStyles.Emptyline, Text: "\n"},
+			&widget.SeparatorSegment{},
+			&widget.TextSegment{Style: MdStyles.Emptyline, Text: "\n"},
+		}, nil
 	case *ast.Link:
 		link, _ := url.Parse(string(t.Destination))
 		text := forceIntoText(source, n)
@@ -81,7 +85,10 @@ func renderNode(source []byte, n ast.Node, blockquote bool) ([]widget.RichTextSe
 		if data[len(data)-1] == '\n' {
 			data = data[:len(data)-1]
 		}
-		return []widget.RichTextSegment{&widget.TextSegment{Style: widget.RichTextStyleCodeBlock, Text: string(data)}}, nil
+		return []widget.RichTextSegment{
+			&widget.TextSegment{Style: MdStyles.Emptyline, Text: "\n"},
+			&widget.TextSegment{Style: MdStyles.Codeblock, Text: string(data)},
+		}, nil
 	case *ast.Emphasis:
 		text := string(forceIntoText(source, n))
 		switch t.Level {
@@ -107,9 +114,9 @@ func renderNode(source []byte, n ast.Node, blockquote bool) ([]widget.RichTextSe
 		dest := string(t.Destination)
 		var url fyne.URI
 		if filepath.IsAbs(dest) {
-		  url = storage.NewFileURI(dest)
+			url = storage.NewFileURI(dest)
 		} else {
-		  url = utils.GetImageURI(uri, dest)
+			url = utils.GetImageURI(uri, dest)
 		}
 		return []widget.RichTextSegment{&widget.ImageSegment{Source: url, Title: string(t.Title), Alignment: fyne.TextAlignCenter}}, nil
 	}
@@ -168,7 +175,14 @@ func forceIntoHeadingText(source []byte, n ast.Node) string {
 // Parse :: parse markdown and returns richText segments
 func parse(content []byte) []widget.RichTextSegment {
 	r := mdRenderer{}
-	md := goldmark.New(goldmark.WithRenderer(&r))
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			extension.Table,
+			extension.Strikethrough,
+			extension.Linkify,
+		),
+		goldmark.WithRenderer(&r),
+	)
 	err := md.Convert(content, nil)
 	if err != nil {
 		fyne.LogError("Failed to parse markdown", err)
@@ -188,7 +202,7 @@ func (m *Md) Hello() {
 var uri fyne.URI
 
 func New(URI fyne.URI, content []byte) *Md {
-  uri = URI
+	uri = URI
 	return &Md{
 		widget.NewRichText(parse(content)...),
 	}

@@ -26,7 +26,7 @@ func GetFileContent(uri fyne.URI) ([]byte, error) {
 
 // GetImageURI :: gets absolute path of the image
 func GetImageURI(URI fyne.URI, rpath string) fyne.URI {
-  dir := filepath.Dir(URI.Path())
-  imgPath := filepath.Join(dir, rpath)
-  return storage.NewFileURI(imgPath)
+	dir := filepath.Dir(URI.Path())
+	imgPath := filepath.Join(dir, rpath)
+	return storage.NewFileURI(imgPath)
 }

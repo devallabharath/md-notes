@@ -9,9 +9,9 @@ import (
 
 // Tab :: tab details and func(save, saveas)
 type Tab struct {
-	tabitem *container.TabItem
-	Editor  *Editor
-	uri     fyne.URI
+	Tab    *container.TabItem
+	Editor *Editor
+	uri    fyne.URI
 }
 
 func (tab *Tab) save() {
